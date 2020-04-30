@@ -248,10 +248,16 @@ GENERATE_TAMPA = validate_input_bool('Generate also TAMPA file? y/n: ', ['y', 'Y
 SRC_FOLDER = str(Path.joinpath(Path(FLAGS_FOLDER), Path(REL_FOLDER)))
 
 flags = get_flags(SRC_FOLDER, FLAGS_FOLDER, MIN_FOLDER_DEPTH, MAX_FOLDER_DEPTH)
+if len(flags) == 0:
+    print('No flags to parse. Exiting...')
+    sys.exit()
+
 max_flag_width = get_max_flag_width(flags)
 (currentX, currentY, column_width) = give_valid_position(0, MAX_HEIGHT, 0, 0)
 
 base_img = PIL.Image.new('RGBA', (MAX_WIDTH, MAX_HEIGHT), color=(255, 255, 255, 255))
+
+max_height_reached = 0
 
 print('Parsing the flags...')
 for idx, flag in enumerate(flags):
@@ -277,6 +283,7 @@ for idx, flag in enumerate(flags):
         column_width = max([column_width, delta_text + text_size[0]])
 
         currentY += row_height
+        max_height_reached = max([max_height_reached, currentY])
     else:
         # test write
         img = image_utils.ImageText((800, 600), background=(255, 255, 255, 255))
@@ -319,8 +326,12 @@ for idx, flag in enumerate(flags):
         column_width = max([column_width, delta_text + text_size[0]])
 
         currentY += row_height
+        max_height_reached = max([max_height_reached, currentY])
 
-base_img.save(DEST_FILE_NAME)
+final_width = currentX + column_width + 5
+max_height_reached += 5
+cropped_img = base_img.crop((0, 0, final_width, max_height_reached))
+cropped_img.save(DEST_FILE_NAME)
 
 
 if GENERATE_TAMPA:

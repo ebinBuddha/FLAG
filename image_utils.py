@@ -89,10 +89,13 @@ class ImageText(object):
             lines.append(line)
         lines = [' '.join(line) for line in lines if line]
         height = y
+        max_width = 0
         for index, line in enumerate(lines):
             if place == 'left':
                 self.write_text((x, height), line, font_filename, font_size,
                                 color)
+                total_size = self.get_text_size(font_filename, font_size, line)
+                max_width = max([max_width, total_size[0]])
             elif place == 'right':
                 total_size = self.get_text_size(font_filename, font_size, line)
                 x_left = x + box_width - total_size[0]
@@ -127,4 +130,4 @@ class ImageText(object):
                 self.write_text((last_word_x, height), words[-1], font_filename,
                                 font_size, color)
             height += text_height
-        return (box_width, height - y)
+        return ( (box_width, max_width)[place == 'left'], height - y)
