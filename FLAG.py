@@ -14,13 +14,13 @@ BANNER = """
     8 8888         8 888888888888 .8'       `8. `88888.  `8888888P'
     
 """
-NAME = "FLAG - Flag List, Advanced Generator"
-VERSION = "v0.1"
+NAME = 'FLAG - Flag List, Advanced Generator'
+VERSION = 'v0.1'
 
-FLAG_FILE_EXTENSION = ".png"
-DEST_FILE_EXTENSION = ".png"
+FLAG_FILE_EXTENSION = '.png'
+DEST_FILE_EXTENSION = '.png'
 
-DEFAULT_TITLE = "Extra Flags"
+DEFAULT_TITLE = 'Extra Flags'
 
 MARGIN_TITLE_TOP = 5
 MARGIN_TITLE_BOTTOM = 2
@@ -38,27 +38,27 @@ MAX_COLUMN_WIDTH = 400
 MAX_HEIGHT = 3500
 MAX_WIDTH = 12000
 
-TAMPA_SEPARATOR = "|"
-TAMPA_FILENAME = "listofcoordinates.txt"
+TAMPA_SEPARATOR = '|'
+TAMPA_FILENAME = 'listofcoordinates.txt'
 
 FONT_FILENAME = 'DejaVuSansMono.ttf'
 
 # enough chit chat
 print(BANNER)
-print(NAME, VERSION, sep=" - ")
-print("")
+print(NAME, VERSION, sep=' - ')
+print('')
 
 try:
     import PIL
     from PIL import Image, ImageDraw
 except:
-    print("Error: Couldn't import Pillow library (https://pillow.readthedocs.io/). Please install Pillow.")
+    print('Error: Couldn''t import Pillow library (https://pillow.readthedocs.io/). Please install Pillow.')
     sys.exit(-1)
 
 try:
     import image_utils # adapted from https://gist.github.com/turicas/1455973/8ca2c5fc823b611ea1a0f631fe2fbfef4c9591d7
 except:
-    print("Error: Couldn't import Image Utils. Please make sure image_utils has been downloaded with this tool.")
+    print('Error: Couldn''t import Image Utils. Please make sure image_utils has been downloaded with this tool.')
     sys.exit(-1)
 
 
@@ -70,7 +70,7 @@ def validate_input_bool(prompt, true_values, false_values):
             return True
         if user_response in false_values:
             return False
-        print("Invalid input, retry.")
+        print('Invalid input, retry.')
 
 
 def validate_input_dir_exists(prompt):
@@ -78,7 +78,7 @@ def validate_input_dir_exists(prompt):
         user_response = input(prompt)
         if os.path.exists(user_response):
             return user_response
-        print("Invalid input, retry.")
+        print('Invalid input, retry.')
 
 
 def validate_input_rel_dir_exists(prompt, base):
@@ -86,13 +86,13 @@ def validate_input_rel_dir_exists(prompt, base):
         user_response = input(prompt)
         if os.path.exists(os.path.join(base,user_response)):
             return user_response
-        print("Invalid input, retry.")
+        print('Invalid input, retry.')
 
 
 def validate_input_positive_integer_or_empty(prompt):
     while True:
         user_response = input(prompt)
-        if user_response == "":
+        if user_response == '':
             return -1
         try:
             converted_response = int(user_response)
@@ -100,13 +100,13 @@ def validate_input_positive_integer_or_empty(prompt):
                 return converted_response
         except:
             pass
-        print("Invalid input, retry")
+        print('Invalid input, retry')
 
 
 def validate_input_positive_integer(prompt):
     while True:
         user_response = input(prompt)
-        if user_response == "":
+        if user_response == '':
             return 0
         try:
             converted_response = int(user_response)
@@ -114,7 +114,7 @@ def validate_input_positive_integer(prompt):
                 return converted_response
         except:
             pass
-        print("Invalid input, retry")
+        print('Invalid input, retry')
 
 
 def validate_input_file_name(prompt, valid_extension):
@@ -123,14 +123,14 @@ def validate_input_file_name(prompt, valid_extension):
         (given_root, given_extension) = os.path.splitext(user_response)
         if str.lower(given_extension) == str.lower(valid_extension):
             return user_response
-        elif given_extension == "":
+        elif given_extension == '':
             return given_root + valid_extension
-        print("Invalid extension. %s expected" % valid_extension)
+        print('Invalid extension. %s expected' % valid_extension)
 
 
 def validate_input_string_or_default(prompt, default_text):
     user_response = input(prompt)
-    if user_response == "":
+    if user_response == '':
         return default_text
     return user_response
 
@@ -185,7 +185,7 @@ def get_flags(src, flags_folder, min_depth, max_depth):
         if len(valid_files) == 0:
             continue
 
-        flags.append(Flag(os.path.basename(os.path.normpath(full_dir)), PurePosixPath(Path(relative_dir)), "", level,
+        flags.append(Flag(os.path.basename(os.path.normpath(full_dir)), PurePosixPath(Path(relative_dir)), '', level,
                           has_image=False, is_header=True))
         for file in valid_files:
             flag_name, extension = os.path.splitext(file)
@@ -226,21 +226,21 @@ def give_valid_position(x, y, h, c):
 
 
 # INPUT
-FLAGS_FOLDER = validate_input_dir_exists("Path to flags/ folder: ")
-REL_FOLDER = validate_input_rel_dir_exists("Relative path to root folder to parse: ", FLAGS_FOLDER)
+FLAGS_FOLDER = validate_input_dir_exists('Path to flags/ folder: ')
+REL_FOLDER = validate_input_rel_dir_exists('Relative path to root folder to parse: ', FLAGS_FOLDER)
 
-MAX_FOLDER_DEPTH = validate_input_positive_integer_or_empty("Maximum folder recursion depth from given root (default no limit):")
+MAX_FOLDER_DEPTH = validate_input_positive_integer_or_empty('Maximum folder recursion depth from given root (default no limit):')
 
-MIN_FOLDER_DEPTH = validate_input_positive_integer("Initial folder recursion depth from given root (default 0):")
+MIN_FOLDER_DEPTH = validate_input_positive_integer('Initial folder recursion depth from given root (default 0):')
 MIN_FOLDER_DEPTH = min(MIN_FOLDER_DEPTH, max(MAX_FOLDER_DEPTH, 0))
 if MAX_FOLDER_DEPTH == -1:
     MAX_FOLDER_DEPTH = None
 
-DEST_FILE_NAME = validate_input_file_name("Insert output file name: ", DEST_FILE_EXTENSION)
+DEST_FILE_NAME = validate_input_file_name('Insert output file name: ', DEST_FILE_EXTENSION)
 
-TITLE = validate_input_string_or_default("Insert title (default %s):" % DEFAULT_TITLE, DEFAULT_TITLE)
+#TITLE = validate_input_string_or_default('Insert title (default %s):' % DEFAULT_TITLE, DEFAULT_TITLE)
 
-GENERATE_TAMPA = validate_input_bool("Generate also TAMPA file? y/n: ", ["y", "Y"], ["n", "N"])
+GENERATE_TAMPA = validate_input_bool('Generate also TAMPA file? y/n: ', ['y', 'Y'], ['n', 'N'])
 # end of user input
 
 
@@ -311,7 +311,7 @@ for idx, flag in enumerate(flags):
         flag.flag_position = (x_pos_flag, y_pos_flag) # save the flag position. needed for TAMPA coordinates export
 
         # draw the flag rectangle
-        ImageDraw.Draw(base_img).rectangle((x_pos_flag_rect, y_pos_flag_rect, x_pos_flag_rect + flag.flag_size[0], y_pos_flag_rect + flag.flag_size[1]), fill ="white", outline ="black")
+        ImageDraw.Draw(base_img).rectangle((x_pos_flag_rect, y_pos_flag_rect, x_pos_flag_rect + flag.flag_size[0], y_pos_flag_rect + flag.flag_size[1]), fill ='white', outline ='black')
 
         cropped_text = img.image.crop((delta_text, 0, text_size[0] + delta_text, text_size[1]))
         base_img.paste(cropped_text, (x_pos_text, y_pos_text, x_pos_text + text_size[0], y_pos_text + text_size[1]))
@@ -325,3 +325,5 @@ base_img.save(DEST_FILE_NAME)
 
 if GENERATE_TAMPA:
     generate_tampa(flags)
+
+print('Done.')
