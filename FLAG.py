@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, glob, re
 from pathlib import Path, PurePosixPath
 
 BANNER = """
@@ -43,6 +43,8 @@ TAMPA_FILENAME = 'listofcoordinates.txt'
 
 FONT_FILENAME = 'DejaVuSansMono.ttf'
 
+FLAG_FILENAME = 'flag_list.txt'
+
 # enough chit chat
 print(BANNER)
 print(NAME, VERSION, sep=' - ')
@@ -77,15 +79,18 @@ def validate_input_dir_exists(prompt):
     while True:
         user_response = input(prompt)
         if os.path.exists(user_response):
-            return user_response
+            return casedpath(user_response)
         print('Invalid input, retry.')
 
 
 def validate_input_rel_dir_exists(prompt, base):
     while True:
         user_response = input(prompt)
-        if os.path.exists(os.path.join(base,user_response)):
-            return user_response
+        cased_base = casedpath(os.path.realpath(base))
+        joined = os.path.join(cased_base,user_response)
+        if os.path.exists(joined):
+            joined = casedpath(joined)
+            return os.path.relpath(joined, cased_base)
         print('Invalid input, retry.')
 
 
@@ -174,13 +179,23 @@ class Flag(object):
         return TAMPA_SEPARATOR.join([str(self.rel_path), ','.join([str(x) for x in self.flag_position])])
 
 
+def casedpath(path):
+    r = glob.glob(re.sub(r'([^:/\\])(?=[/\\]|$)', r'[\1]', path))
+    return r and r[0] or path
+
+
 def get_flags(src, flags_folder, min_depth, max_depth):
     print('Gathering the flags...')
     flags = []
-    for (flags_folder, dirs, files, level) in walk_level(src, min_depth, max_depth):
-        relative_dir = PurePosixPath(Path(os.path.relpath(flags_folder, flags_folder)))
-        full_dir = flags_folder
-        valid_files = [f for f in files if os.path.splitext(f)[1] == FLAG_FILE_EXTENSION]
+    for (current_root, dirs, files, level) in walk_level(src, min_depth, max_depth):
+        relative_dir = PurePosixPath(Path(os.path.relpath(current_root, flags_folder)))
+        full_dir = current_root
+        if not FLAG_FILENAME in files:
+            continue
+        flag_file = PurePosixPath(Path(full_dir).joinpath(FLAG_FILENAME))
+
+        with open(flag_file, 'r', encoding='utf8') as f:
+            valid_files = [line.rstrip() + FLAG_FILE_EXTENSION for line in f if os.path.exists(os.path.join(full_dir, line.rstrip())) ]
 
         if len(valid_files) == 0:
             continue
