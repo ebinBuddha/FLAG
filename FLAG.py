@@ -15,7 +15,7 @@ BANNER = """
     
 """
 NAME = 'FLAG - Flag List, Advanced Generator'
-VERSION = 'v0.1'
+VERSION = 'v1.0'
 
 FLAG_FILE_EXTENSION = '.png'
 DEST_FILE_EXTENSION = '.png'
