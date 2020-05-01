@@ -43,8 +43,6 @@ TAMPA_FILENAME = 'listofcoordinates.txt'
 
 FONT_FILENAME = 'DejaVuSansMono.ttf'
 
-FLAG_FILENAME = 'flag_list.txt'
-
 # enough chit chat
 print(BANNER)
 print(NAME, VERSION, sep=' - ')
@@ -152,6 +150,7 @@ def walk_level(starting_dir, starting_depth=0, max_level=None):
     num_sep = some_dir.count(os.path.sep)
     for (root, dirs, files) in os.walk(some_dir):
         dirs.sort(key=unicode_collator.sort_key)
+        files.sort(key=unicode_collator.sort_key)
         num_sep_this = root.count(os.path.sep)
         cur_level = num_sep_this - num_sep
         if cur_level < starting_depth:
@@ -197,12 +196,7 @@ def get_flags(src, flags_folder, min_depth, max_depth):
     for (current_root, dirs, files, level) in walk_level(src, min_depth, max_depth):
         relative_dir = PurePosixPath(Path(os.path.relpath(current_root, flags_folder)))
         full_dir = current_root
-        if not FLAG_FILENAME in files:
-            continue
-        flag_file = PurePosixPath(Path(full_dir).joinpath(FLAG_FILENAME))
-
-        with open(flag_file, 'r', encoding='utf8') as f:
-            valid_files = [line.rstrip() + FLAG_FILE_EXTENSION for line in f if os.path.exists(os.path.join(full_dir, line.rstrip())) ]
+        valid_files = [f for f in files if os.path.splitext(f)[1] == FLAG_FILE_EXTENSION]
 
         if len(valid_files) == 0:
             continue
