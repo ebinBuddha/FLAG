@@ -54,13 +54,19 @@ try:
     import PIL
     from PIL import Image, ImageDraw
 except:
-    print('Error: Couldn''t import Pillow library (https://pillow.readthedocs.io/). Please install Pillow.')
+    print('Error: Couldn\'t import Pillow library (https://pillow.readthedocs.io/). Please install Pillow.')
     sys.exit(-1)
 
 try:
     import image_utils # adapted from https://gist.github.com/turicas/1455973/8ca2c5fc823b611ea1a0f631fe2fbfef4c9591d7
 except:
-    print('Error: Couldn''t import Image Utils. Please make sure image_utils has been downloaded with this tool.')
+    print('Error: Couldn\'t import Image Utils. Please make sure image_utils.py has been downloaded with this tool.')
+    sys.exit(-1)
+
+try:
+    from pyuca import Collator
+except:
+    print('Error: Couldn\'t import pyuca library (https://github.com/jtauber/pyuca). Please install pyuca.')
     sys.exit(-1)
 
 
@@ -145,6 +151,7 @@ def walk_level(starting_dir, starting_depth=0, max_level=None):
     assert os.path.isdir(some_dir)
     num_sep = some_dir.count(os.path.sep)
     for (root, dirs, files) in os.walk(some_dir):
+        dirs.sort(key=unicode_collator.sort_key)
         num_sep_this = root.count(os.path.sep)
         cur_level = num_sep_this - num_sep
         if cur_level < starting_depth:
@@ -238,6 +245,9 @@ def give_valid_position(x, y, h, c):
         x = x + c + 5
         c = 0
     return (x, y, c)
+
+
+unicode_collator = Collator()
 
 
 # INPUT
