@@ -255,7 +255,7 @@ if len(flags) == 0:
 max_flag_width = get_max_flag_width(flags)
 (currentX, currentY, column_width) = give_valid_position(0, MAX_HEIGHT, 0, 0)
 
-base_img = PIL.Image.new('RGBA', (MAX_WIDTH, MAX_HEIGHT), color=(255, 255, 255, 255))
+base_img = PIL.Image.new('RGB', (MAX_WIDTH, MAX_HEIGHT), color=(255, 255, 255, 255))
 
 max_height_reached = 0
 
@@ -263,7 +263,7 @@ print('Parsing the flags...')
 for idx, flag in enumerate(flags):
     if flag.is_header:
         print('Current folder: %s' % flag.flag_name)
-        img = image_utils.ImageText((800, 600), background=(255, 255, 255, 255))
+        img = image_utils.ImageText((800, 600), mode='RGB', background=(255, 255, 255, 255))
         text_size = img.write_text_box((0, 0), flag.flag_name, MAX_COLUMN_WIDTH, FONT_FILENAME,
                                  font_size=14, color=(0, 0, 0), place='left',
                                  justify_last_line=False)
@@ -286,7 +286,7 @@ for idx, flag in enumerate(flags):
         max_height_reached = max([max_height_reached, currentY])
     else:
         # test write
-        img = image_utils.ImageText((800, 600), background=(255, 255, 255, 255))
+        img = image_utils.ImageText((800, 600), mode='RGB', background=(255, 255, 255, 255))
 
         delta_text = MARGIN_COLUMN_LEFT + max_flag_width + MARGIN_FLAG_RIGHT + MARGIN_TEXT_LEFT # position of text from column
 
