@@ -14,7 +14,8 @@ If you run into any issues, please make a post on /flag/.
 
 - Python 3+
 - Pillow (https://pillow.readthedocs.io/)
-- A /flag/-compliant collection based on the work at the previously-mentioned project repo
+- pyuca (https://github.com/jtauber/pyuca)
+- A local copy of the previously-mentioned /extraflags/ project repo
 
 ## How to install
 
@@ -32,10 +33,10 @@ Download this repository to a safe location (clone or download the zip archive a
 
 To get to run you'll be asked a some things:
 
-1. ***Path to flags/ folder***: this is the path (relative or absolute) to the folder containing the flags. E.g. if you saved your /flag/-compliant collection in `C:\myflags\`, this path should contain a folder called `flags` where all the nations' folders are in turn contained. Write therefore `C:\myflags\flags` or the equivalent relative path in the prompt.
+1. ***Path to flags/ folder***: this is the path (relative or absolute) to the folder containing the /extraflags/. E.g. if you saved your local copy in `C:\extraflags\`, this path should contain a folder called `flags` where all the nations' folders are in turn contained. Write therefore `C:\extraflags\flags` or the equivalent relative path in the prompt.
 
 ```
-C:\myflags\
+C:\extraflags\
     |- flags    <------ you need to write the path to here
         |- Afghanistan
         |- Albania
