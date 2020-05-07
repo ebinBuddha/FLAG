@@ -15,7 +15,7 @@ BANNER = """
     
 """
 NAME = 'FLAG - Flag List, Advanced Generator'
-VERSION = 'v1.0'
+VERSION = 'v1.1'
 
 FLAG_FILE_EXTENSION = '.png'
 DEST_FILE_EXTENSION = '.png'
@@ -182,7 +182,7 @@ class Flag(object):
         return self.has_image and self.flag_position is not None
 
     def get_tampa_string(self):
-        return TAMPA_SEPARATOR.join([str(self.rel_path), ','.join([str(x) for x in self.flag_position])])
+        return TAMPA_SEPARATOR.join(['"%s"' % str(self.rel_path), ','.join([str(x) for x in self.flag_position])])
 
 
 def casedpath(path):
