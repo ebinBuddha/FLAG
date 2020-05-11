@@ -15,7 +15,7 @@ BANNER = """
     
 """
 NAME = 'FLAG - Flag List, Advanced Generator'
-VERSION = 'v1.1'
+VERSION = 'v1.1.1'
 
 FLAG_FILE_EXTENSION = '.png'
 DEST_FILE_EXTENSION = '.png'
@@ -337,7 +337,7 @@ for idx, flag in enumerate(flags):
         flag.flag_position = (x_pos_flag, y_pos_flag) # save the flag position. needed for TAMPA coordinates export
 
         # draw the flag rectangle
-        ImageDraw.Draw(base_img).rectangle((x_pos_flag_rect, y_pos_flag_rect, x_pos_flag_rect + flag.flag_size[0], y_pos_flag_rect + flag.flag_size[1]), fill ='white', outline ='black')
+        ImageDraw.Draw(base_img).rectangle((x_pos_flag_rect, y_pos_flag_rect, x_pos_flag_rect + flag.flag_size[0] + 1, y_pos_flag_rect + flag.flag_size[1] + 1), fill ='white', outline ='black') # +1 because the end coordinates are not inclusive
 
         cropped_text = img.image.crop((delta_text, 0, text_size[0] + delta_text, text_size[1]))
         base_img.paste(cropped_text, (x_pos_text, y_pos_text, x_pos_text + text_size[0], y_pos_text + text_size[1]))
